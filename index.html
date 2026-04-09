@@ -242,7 +242,7 @@ footer a:hover { text-decoration: underline; }
         <div class="chart-card"><h3>Formal vs. Informal by Year</h3><canvas id="chart-annual-type"></canvas></div>
     </div>
     <div class="grid-2">
-        <div class="chart-card"><h3>Median Elapsed Days by Year</h3><canvas id="chart-annual-duration"></canvas></div>
+        <div class="chart-card"><h3>Median Elapsed Days by Year (Formal)</h3><canvas id="chart-annual-duration"></canvas></div>
         <div class="chart-card"><h3>Formal Consultations by Year</h3><canvas id="chart-annual-formal"></canvas></div>
     </div>
 </section>
@@ -253,10 +253,9 @@ footer a:hover { text-decoration: underline; }
     <div class="grid-3">
         <div class="chart-card"><h3>Formal vs. Informal</h3><canvas id="chart-formal-informal"></canvas></div>
         <div class="chart-card"><h3>Consultation Complexity</h3><canvas id="chart-complexity"></canvas></div>
-        <div class="chart-card"><h3>Duration Distribution (All)</h3><canvas id="chart-elapsed-dist"></canvas></div>
+        <div class="chart-card"><h3>Duration Distribution (Formal)</h3><canvas id="chart-elapsed-dist"></canvas></div>
     </div>
     <div class="grid-2">
-        <div class="chart-card"><h3>Duration: Formal Consultations</h3><canvas id="chart-formal-elapsed"></canvas></div>
         <div class="chart-card"><h3>Duration: Informal Consultations</h3><canvas id="chart-informal-elapsed"></canvas></div>
     </div>
 </section>
@@ -266,13 +265,13 @@ footer a:hover { text-decoration: underline; }
     <div class="section-title">By Lead Agency</div>
     <div class="grid-2">
         <div class="chart-card"><h3>Consultation Volume (Top 20)</h3><canvas id="chart-agency-vol"></canvas></div>
-        <div class="chart-card"><h3>Median Duration by Agency (Days)</h3><canvas id="chart-agency-dur"></canvas></div>
+        <div class="chart-card"><h3>Median Formal Duration by Agency (Days)</h3><canvas id="chart-agency-dur"></canvas></div>
     </div>
     <div class="table-wrap">
         <div class="table-scroll">
             <table id="table-agency">
                 <thead><tr>
-                    <th>Agency</th><th>Consultations</th><th>Formal</th><th>Formal %</th><th>Median Days</th><th>Jeopardy</th>
+                    <th>Agency</th><th>Consultations</th><th>Formal</th><th>Formal %</th><th>Median Days (Formal)</th><th>Jeopardy</th>
                 </tr></thead>
                 <tbody></tbody>
             </table>
@@ -285,7 +284,7 @@ footer a:hover { text-decoration: underline; }
     <div class="section-title">By Project Category</div>
     <div class="grid-2">
         <div class="chart-card"><h3>Consultation Volume (Top 20)</h3><canvas id="chart-cat-vol"></canvas></div>
-        <div class="chart-card"><h3>Median Duration by Category (Days)</h3><canvas id="chart-cat-dur"></canvas></div>
+        <div class="chart-card"><h3>Median Formal Duration by Category (Days)</h3><canvas id="chart-cat-dur"></canvas></div>
     </div>
 </section>
 
@@ -336,9 +335,9 @@ function num(n) { return n.toLocaleString(); }
 // --- KPIs ---
 const kpiGrid = document.getElementById('kpi-grid');
 const kpis = [
-    { label: 'Total Consultations', value: num(D.kpis.total), sub: 'FY 2008 \u2013 2018' },
+    { label: 'Total Consultations', value: num(D.kpis.total), sub: 'FY 2008 \u2013 2016' },
     { label: 'Formal Consultations', value: num(D.kpis.formal), sub: `${D.kpis.formal_pct}% of total` },
-    { label: 'Median Elapsed Days', value: D.kpis.median_elapsed_days, sub: `Mean: ${D.kpis.mean_elapsed_days} days` },
+    { label: 'Median Elapsed Days', value: D.kpis.median_elapsed_days, sub: `Mean: ${D.kpis.mean_elapsed_days} days (formal only)` },
 
     { label: 'Jeopardy Findings', value: D.species_totals.jeopardy_findings, sub: `In ${D.kpis.jeopardy_consultations} consultations` },
 ];
@@ -443,19 +442,6 @@ makeChart('chart-elapsed-dist', {
         datasets: [{ label: 'Consultations', data: D.elapsed_distribution.map(d => d.count), backgroundColor: ORANGE }]
     },
     options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { title: { display: true, text: 'Days' } } } }
-});
-
-// Formal elapsed
-makeChart('chart-formal-elapsed', {
-    type: 'bar',
-    data: {
-        labels: D.formal_elapsed_dist.map(d => d.bucket),
-        datasets: [{ label: 'Formal', data: D.formal_elapsed_dist.map(d => d.count), backgroundColor: BLUE }]
-    },
-    options: {
-        plugins: { legend: { display: false }, subtitle: { display: true, text: `Median: ${D.formal_stats.median_elapsed} days | Mean: ${D.formal_stats.mean_elapsed} days`, color: '#999' } },
-        scales: { y: { beginAtZero: true }, x: { title: { display: true, text: 'Days' } } }
-    }
 });
 
 // Informal elapsed

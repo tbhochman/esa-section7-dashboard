@@ -1,5 +1,6 @@
 // ESA Section 7 TAILS Dashboard Data
-// 106806 consultations, FY 2008-2018
+// 106806 consultations, FY 2008-2016
+// Duration data reflects formal consultations only
 // Generated: 2026-04-08
 
 const DATA = {
@@ -13,9 +14,8 @@ const DATA = {
     "formal": 8287,
     "informal": 98519,
     "formal_pct": 7.8,
-    "median_elapsed_days": 17.0,
-    "mean_elapsed_days": 36.0,
-    "timely_pct": 84.9,
+    "median_elapsed_days": 63,
+    "mean_elapsed_days": 113.5,
     "jeopardy_consultations": 3,
     "jeopardy_pct": 0.0
   },
@@ -35,9 +35,8 @@ const DATA = {
       "total": 13392,
       "formal": 1280,
       "informal": 12112,
-      "median_elapsed": 21.0,
-      "mean_elapsed": 52.2,
-      "timely_pct": 85.3,
+      "median_elapsed": 66,
+      "mean_elapsed": 147.6,
       "jeop": 2
     },
     {
@@ -45,9 +44,8 @@ const DATA = {
       "total": 14114,
       "formal": 1185,
       "informal": 12929,
-      "median_elapsed": 18.0,
-      "mean_elapsed": 38.4,
-      "timely_pct": 85.3,
+      "median_elapsed": 62.0,
+      "mean_elapsed": 111.9,
       "jeop": 0
     },
     {
@@ -55,9 +53,8 @@ const DATA = {
       "total": 12422,
       "formal": 1055,
       "informal": 11367,
-      "median_elapsed": 15,
-      "mean_elapsed": 37.1,
-      "timely_pct": 86.4,
+      "median_elapsed": 59.5,
+      "mean_elapsed": 111.0,
       "jeop": 0
     },
     {
@@ -65,9 +62,8 @@ const DATA = {
       "total": 11697,
       "formal": 974,
       "informal": 10723,
-      "median_elapsed": 15.0,
-      "mean_elapsed": 32.1,
-      "timely_pct": 84.7,
+      "median_elapsed": 59,
+      "mean_elapsed": 115.2,
       "jeop": 0
     },
     {
@@ -75,9 +71,8 @@ const DATA = {
       "total": 12191,
       "formal": 919,
       "informal": 11272,
-      "median_elapsed": 15.0,
-      "mean_elapsed": 31.2,
-      "timely_pct": 85.7,
+      "median_elapsed": 66,
+      "mean_elapsed": 115.3,
       "jeop": 0
     },
     {
@@ -85,9 +80,8 @@ const DATA = {
       "total": 10621,
       "formal": 774,
       "informal": 9847,
-      "median_elapsed": 16.0,
-      "mean_elapsed": 33.0,
-      "timely_pct": 85.1,
+      "median_elapsed": 76,
+      "mean_elapsed": 119.1,
       "jeop": 0
     },
     {
@@ -95,9 +89,8 @@ const DATA = {
       "total": 10180,
       "formal": 720,
       "informal": 9460,
-      "median_elapsed": 17.0,
-      "mean_elapsed": 36.2,
-      "timely_pct": 83.8,
+      "median_elapsed": 62.0,
+      "mean_elapsed": 101.3,
       "jeop": 1
     },
     {
@@ -105,9 +98,8 @@ const DATA = {
       "total": 11074,
       "formal": 724,
       "informal": 10350,
-      "median_elapsed": 18.0,
-      "mean_elapsed": 33.3,
-      "timely_pct": 82.5,
+      "median_elapsed": 68.5,
+      "mean_elapsed": 103.4,
       "jeop": 0
     },
     {
@@ -115,9 +107,8 @@ const DATA = {
       "total": 11115,
       "formal": 656,
       "informal": 10459,
-      "median_elapsed": 18,
-      "mean_elapsed": 27.6,
-      "timely_pct": 84.3,
+      "median_elapsed": 49,
+      "mean_elapsed": 70.9,
       "jeop": 0
     }
   ],
@@ -125,140 +116,140 @@ const DATA = {
     {
       "name": "Army Corps of Engineers",
       "count": 23764,
-      "median_elapsed": 16,
+      "median_elapsed": 73,
       "formal": 2387,
       "jeop": 0
     },
     {
       "name": "Federal Highway Administration",
       "count": 11037,
-      "median_elapsed": 17.0,
+      "median_elapsed": 49,
       "formal": 629,
       "jeop": 0
     },
     {
       "name": "-- OTHER: CONSULTANT --",
       "count": 10645,
-      "median_elapsed": 28,
+      "median_elapsed": 62.5,
       "formal": 58,
       "jeop": 0
     },
     {
       "name": "Fish and Wildlife Service",
       "count": 6761,
-      "median_elapsed": 14,
+      "median_elapsed": 43.5,
       "formal": 977,
       "jeop": 0
     },
     {
       "name": "Federal Communications Commission",
       "count": 4817,
-      "median_elapsed": 14.0,
+      "median_elapsed": 130,
       "formal": 31,
       "jeop": 0
     },
     {
       "name": "Forest Service",
       "count": 4700,
-      "median_elapsed": 21.0,
+      "median_elapsed": 69,
       "formal": 870,
       "jeop": 1
     },
     {
       "name": "Department of Housing and Urban Development",
       "count": 4110,
-      "median_elapsed": 7.0,
+      "median_elapsed": 60,
       "formal": 8,
       "jeop": 0
     },
     {
       "name": "Federal Energy Regulatory Commission",
       "count": 3068,
-      "median_elapsed": 14.0,
+      "median_elapsed": 129.5,
       "formal": 81,
       "jeop": 0
     },
     {
       "name": "Environmental Protection Agency",
       "count": 2546,
-      "median_elapsed": 16.0,
+      "median_elapsed": 93,
       "formal": 76,
       "jeop": 1
     },
     {
       "name": "Federal Emergency Management Agency",
       "count": 2149,
-      "median_elapsed": 11.0,
+      "median_elapsed": 129.5,
       "formal": 98,
       "jeop": 0
     },
     {
       "name": "Bureau of Land Management",
       "count": 1989,
-      "median_elapsed": 26.0,
+      "median_elapsed": 54.5,
       "formal": 766,
       "jeop": 0
     },
     {
       "name": "Rural Development (USDA)",
       "count": 1677,
-      "median_elapsed": 10,
+      "median_elapsed": 17.5,
       "formal": 25,
       "jeop": 0
     },
     {
       "name": "Community Planning and Development (HUD)",
       "count": 1596,
-      "median_elapsed": 3,
+      "median_elapsed": 13,
       "formal": 2,
       "jeop": 0
     },
     {
       "name": "Natural Resources Conservation Svc",
       "count": 1497,
-      "median_elapsed": 22.0,
+      "median_elapsed": 31,
       "formal": 141,
       "jeop": 0
     },
     {
       "name": "Bureau of Indian Affairs",
       "count": 1208,
-      "median_elapsed": 19,
+      "median_elapsed": 21,
       "formal": 194,
       "jeop": 0
     },
     {
       "name": "-- OTHER NON-FEDERAL AGENCY --",
       "count": 1194,
-      "median_elapsed": 20,
+      "median_elapsed": 72,
       "formal": 73,
       "jeop": 0
     },
     {
       "name": "STATE OF NEW JERSEY",
       "count": 1045,
-      "median_elapsed": 7.0,
+      "median_elapsed": 0,
       "formal": 0,
       "jeop": 0
     },
     {
       "name": "Rural Utilities Service (USDA)",
       "count": 1021,
-      "median_elapsed": 8,
+      "median_elapsed": 53,
       "formal": 9,
       "jeop": 0
     },
     {
       "name": "National Park Service",
       "count": 1017,
-      "median_elapsed": 23,
+      "median_elapsed": 90,
       "formal": 116,
       "jeop": 0
     },
     {
       "name": "Unknown",
       "count": 943,
-      "median_elapsed": 14,
+      "median_elapsed": 54,
       "formal": 59,
       "jeop": 0
     }
@@ -267,121 +258,121 @@ const DATA = {
     {
       "name": "development",
       "count": 15458,
-      "median_elapsed": 14,
+      "median_elapsed": 74.0,
       "formal": 717
     },
     {
       "name": "transportation",
       "count": 12171,
-      "median_elapsed": 17.0,
+      "median_elapsed": 77.0,
       "formal": 984
     },
     {
       "name": "bridge",
       "count": 6106,
-      "median_elapsed": 15.0,
+      "median_elapsed": 84.5,
       "formal": 286
     },
     {
       "name": "communications tower",
       "count": 5951,
-      "median_elapsed": 15.0,
+      "median_elapsed": 126,
       "formal": 50
     },
     {
       "name": "oil or gas",
       "count": 4565,
-      "median_elapsed": 14.0,
+      "median_elapsed": 49,
       "formal": 236
     },
     {
       "name": "** other **",
       "count": 4149,
-      "median_elapsed": 18.0,
+      "median_elapsed": 40.0,
       "formal": 324
     },
     {
       "name": "stream / waterbody",
       "count": 3976,
-      "median_elapsed": 18,
+      "median_elapsed": 53.0,
       "formal": 473
     },
     {
       "name": "agriculture",
       "count": 3300,
-      "median_elapsed": 20,
+      "median_elapsed": 69.0,
       "formal": 329
     },
     {
       "name": "forestry",
       "count": 2518,
-      "median_elapsed": 20,
+      "median_elapsed": 43,
       "formal": 395
     },
     {
       "name": "transmission line",
       "count": 2496,
-      "median_elapsed": 17,
+      "median_elapsed": 78.5,
       "formal": 203
     },
     {
       "name": "land",
       "count": 2457,
-      "median_elapsed": 17.0,
+      "median_elapsed": 70,
       "formal": 207
     },
     {
       "name": "dredge / excavation",
       "count": 2270,
-      "median_elapsed": 17,
+      "median_elapsed": 63,
       "formal": 162
     },
     {
       "name": "power generation",
       "count": 2167,
-      "median_elapsed": 24,
+      "median_elapsed": 111.0,
       "formal": 189
     },
     {
       "name": "wastewater facility",
       "count": 2124,
-      "median_elapsed": 16.5,
+      "median_elapsed": 56,
       "formal": 46
     },
     {
       "name": "wastewater pipeline",
       "count": 2034,
-      "median_elapsed": 13,
+      "median_elapsed": 80,
       "formal": 38
     },
     {
       "name": "oil or gas pipeline",
       "count": 1888,
-      "median_elapsed": 28.0,
+      "median_elapsed": 73.5,
       "formal": 71
     },
     {
       "name": "mining",
       "count": 1820,
-      "median_elapsed": 24.0,
+      "median_elapsed": 68.5,
       "formal": 179
     },
     {
       "name": "land restoration / enhancement",
       "count": 1551,
-      "median_elapsed": 16.0,
+      "median_elapsed": 48.0,
       "formal": 196
     },
     {
       "name": "water supply pipeline",
       "count": 1474,
-      "median_elapsed": 14.0,
+      "median_elapsed": 49.5,
       "formal": 88
     },
     {
       "name": "private dock / pier",
       "count": 1357,
-      "median_elapsed": 11,
+      "median_elapsed": 47,
       "formal": 63
     }
   ],
@@ -389,277 +380,277 @@ const DATA = {
     {
       "name": "PA",
       "count": 9968,
-      "median_elapsed": 30,
+      "median_elapsed": 122.5,
       "formal": 33
     },
     {
       "name": "MS",
       "count": 6939,
-      "median_elapsed": 8,
+      "median_elapsed": 90.0,
       "formal": 26
     },
     {
       "name": "TX",
       "count": 6555,
-      "median_elapsed": 6,
+      "median_elapsed": 120,
       "formal": 114
     },
     {
       "name": "CA",
       "count": 5837,
-      "median_elapsed": 44,
+      "median_elapsed": 83.0,
       "formal": 2823
     },
     {
       "name": "FL",
       "count": 5061,
-      "median_elapsed": 20,
+      "median_elapsed": 89.0,
       "formal": 576
     },
     {
       "name": "WA",
       "count": 4295,
-      "median_elapsed": 22,
+      "median_elapsed": 42.0,
       "formal": 535
     },
     {
       "name": "IN",
       "count": 4235,
-      "median_elapsed": 9,
+      "median_elapsed": 46.5,
       "formal": 27
     },
     {
       "name": "OH",
       "count": 3818,
-      "median_elapsed": 15.0,
+      "median_elapsed": 28.0,
       "formal": 193
     },
     {
       "name": "LA",
       "count": 3795,
-      "median_elapsed": 12,
+      "median_elapsed": 55,
       "formal": 23
     },
     {
       "name": "NJ",
       "count": 3682,
-      "median_elapsed": 9,
+      "median_elapsed": 29.5,
       "formal": 55
     },
     {
       "name": "NC",
       "count": 2943,
-      "median_elapsed": 24.0,
+      "median_elapsed": 96.5,
       "formal": 52
     },
     {
       "name": "XX",
       "count": 2903,
-      "median_elapsed": 28.0,
+      "median_elapsed": 32.5,
       "formal": 95
     },
     {
       "name": "SC",
       "count": 2899,
-      "median_elapsed": 14.0,
+      "median_elapsed": 125.0,
       "formal": 24
     },
     {
       "name": "TN",
       "count": 2852,
-      "median_elapsed": 7.0,
+      "median_elapsed": 51.5,
       "formal": 144
     },
     {
       "name": "GA",
       "count": 2709,
-      "median_elapsed": 11.0,
+      "median_elapsed": 111.5,
       "formal": 48
     },
     {
       "name": "SD",
       "count": 2565,
-      "median_elapsed": 7,
+      "median_elapsed": 23,
       "formal": 184
     },
     {
       "name": "KS",
       "count": 2513,
-      "median_elapsed": 17,
+      "median_elapsed": 79.0,
       "formal": 29
     },
     {
       "name": "NE",
       "count": 2280,
-      "median_elapsed": 17.0,
+      "median_elapsed": 12,
       "formal": 51
     },
     {
       "name": "NY",
       "count": 2175,
-      "median_elapsed": 11,
+      "median_elapsed": 33.5,
       "formal": 31
     },
     {
       "name": "KY",
       "count": 2156,
-      "median_elapsed": 15.0,
+      "median_elapsed": 90,
       "formal": 33
     },
     {
       "name": "CO",
       "count": 2085,
-      "median_elapsed": 20,
+      "median_elapsed": 42.0,
       "formal": 506
     },
     {
       "name": "ND",
       "count": 2048,
-      "median_elapsed": 19,
+      "median_elapsed": 41.5,
       "formal": 10
     },
     {
       "name": "VA",
       "count": 1948,
-      "median_elapsed": 21,
+      "median_elapsed": 135.0,
       "formal": 69
     },
     {
       "name": "AK",
       "count": 1924,
-      "median_elapsed": 10.0,
+      "median_elapsed": 37.5,
       "formal": 143
     },
     {
       "name": "MO",
       "count": 1334,
-      "median_elapsed": 18,
+      "median_elapsed": 84,
       "formal": 28
     },
     {
       "name": "UT",
       "count": 1334,
-      "median_elapsed": 15,
+      "median_elapsed": 52.5,
       "formal": 227
     },
     {
       "name": "AR",
       "count": 1332,
-      "median_elapsed": 7,
+      "median_elapsed": 29.0,
       "formal": 34
     },
     {
       "name": "AZ",
       "count": 1259,
-      "median_elapsed": 23,
+      "median_elapsed": 120.5,
       "formal": 167
     },
     {
       "name": "OK",
       "count": 1252,
-      "median_elapsed": 21,
+      "median_elapsed": 72.0,
       "formal": 57
     },
     {
       "name": "ID",
       "count": 1233,
-      "median_elapsed": 16.0,
+      "median_elapsed": 69.0,
       "formal": 247
     },
     {
       "name": "AL",
       "count": 1215,
-      "median_elapsed": 12,
+      "median_elapsed": 102.0,
       "formal": 52
     },
     {
       "name": "MT",
       "count": 1002,
-      "median_elapsed": 20,
+      "median_elapsed": 90,
       "formal": 140
     },
     {
       "name": "OR",
       "count": 949,
-      "median_elapsed": 28.0,
+      "median_elapsed": 59,
       "formal": 359
     },
     {
       "name": "HI",
       "count": 872,
-      "median_elapsed": 29.0,
+      "median_elapsed": 77,
       "formal": 168
     },
     {
       "name": "IL",
       "count": 809,
-      "median_elapsed": 19.0,
+      "median_elapsed": 34,
       "formal": 21
     },
     {
       "name": "NV",
       "count": 781,
-      "median_elapsed": 29.0,
+      "median_elapsed": 51,
       "formal": 395
     },
     {
       "name": "MI",
       "count": 747,
-      "median_elapsed": 18.0,
+      "median_elapsed": 27.0,
       "formal": 97
     },
     {
       "name": "WV",
       "count": 716,
-      "median_elapsed": 31.0,
+      "median_elapsed": 181,
       "formal": 21
     },
     {
       "name": "WI",
       "count": 688,
-      "median_elapsed": 20,
+      "median_elapsed": 3,
       "formal": 67
     },
     {
       "name": "PR",
       "count": 627,
-      "median_elapsed": 21.0,
+      "median_elapsed": 114,
       "formal": 10
     },
     {
       "name": "ME",
       "count": 578,
-      "median_elapsed": 28,
+      "median_elapsed": 64,
       "formal": 25
     },
     {
       "name": "WY",
       "count": 575,
-      "median_elapsed": 28.0,
+      "median_elapsed": 30.0,
       "formal": 196
     },
     {
       "name": "MN",
       "count": 552,
-      "median_elapsed": 23.0,
+      "median_elapsed": 81.5,
       "formal": 53
     },
     {
       "name": "NM",
       "count": 501,
-      "median_elapsed": 21,
+      "median_elapsed": 91.0,
       "formal": 88
     },
     {
       "name": "MD",
       "count": 247,
-      "median_elapsed": 28,
+      "median_elapsed": 59.0,
       "formal": 8
     },
     {
       "name": "Unknown",
       "count": 18,
-      "median_elapsed": 14.5,
+      "median_elapsed": 32.5,
       "formal": 3
     }
   ],
@@ -667,55 +658,55 @@ const DATA = {
     {
       "name": "Southeast (4)",
       "count": 32543,
-      "median_elapsed": 13,
+      "median_elapsed": 86.0,
       "formal": 1036
     },
     {
       "name": "Northeast (5)",
       "count": 20952,
-      "median_elapsed": 26,
+      "median_elapsed": 72,
       "formal": 260
     },
     {
       "name": "Mountain-Prairie (6)",
       "count": 14407,
-      "median_elapsed": 16,
+      "median_elapsed": 37,
       "formal": 1346
     },
     {
       "name": "Great Lakes (3)",
       "count": 13390,
-      "median_elapsed": 14,
+      "median_elapsed": 28.0,
       "formal": 529
     },
     {
       "name": "Southwest (2)",
       "count": 9587,
-      "median_elapsed": 9.0,
+      "median_elapsed": 108,
       "formal": 431
     },
     {
       "name": "Pacific (1)",
       "count": 7216,
-      "median_elapsed": 23,
+      "median_elapsed": 59.0,
       "formal": 1285
     },
     {
       "name": "Pacific Southwest (8)",
       "count": 6764,
-      "median_elapsed": 41.0,
+      "median_elapsed": 77.0,
       "formal": 3251
     },
     {
       "name": "Alaska (7)",
       "count": 1924,
-      "median_elapsed": 10.0,
+      "median_elapsed": 37.5,
       "formal": 143
     },
     {
       "name": "Region 9",
       "count": 23,
-      "median_elapsed": 417,
+      "median_elapsed": 251.5,
       "formal": 6
     }
   ],
@@ -902,32 +893,6 @@ const DATA = {
   "elapsed_distribution": [
     {
       "bucket": "1-30",
-      "count": 72518
-    },
-    {
-      "bucket": "31-60",
-      "count": 11932
-    },
-    {
-      "bucket": "61-90",
-      "count": 3689
-    },
-    {
-      "bucket": "91-180",
-      "count": 4110
-    },
-    {
-      "bucket": "181-365",
-      "count": 1704
-    },
-    {
-      "bucket": "366+",
-      "count": 1073
-    }
-  ],
-  "formal_elapsed_dist": [
-    {
-      "bucket": "1-30",
       "count": 2326
     },
     {
@@ -977,10 +942,6 @@ const DATA = {
       "count": 683
     }
   ],
-  "formal_stats": {
-    "median_elapsed": 63,
-    "mean_elapsed": 113.5
-  },
   "informal_stats": {
     "median_elapsed": 15,
     "mean_elapsed": 29.4

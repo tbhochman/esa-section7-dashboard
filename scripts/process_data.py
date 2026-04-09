@@ -67,11 +67,13 @@ def main():
     formal_count = sum(1 for r in rows if clean_str(r.get("formal_consult", "")) == "Yes")
     informal_count = total - formal_count
 
+    # Duration stats are formal consultations only
     elapsed_days = []
     for r in rows:
-        e = safe_int(r.get("elapsed", ""))
-        if e > 0:
-            elapsed_days.append(e)
+        if clean_str(r.get("formal_consult", "")) == "Yes":
+            e = safe_int(r.get("elapsed", ""))
+            if e > 0:
+                elapsed_days.append(e)
 
     median_elapsed = round(median(elapsed_days), 1) if elapsed_days else 0
     mean_elapsed = round(mean(elapsed_days), 1) if elapsed_days else 0
@@ -83,23 +85,19 @@ def main():
     jeop_count = sum(1 for r in rows if safe_int(r.get("n_jeop", "")) > 0)
 
     # --- By Fiscal Year ---
-    by_fy = defaultdict(lambda: {"total": 0, "formal": 0, "informal": 0, "elapsed": [], "timely": 0, "timely_total": 0, "jeop": 0})
+    by_fy = defaultdict(lambda: {"total": 0, "formal": 0, "informal": 0, "elapsed": [], "jeop": 0})
     for r in rows:
         fy = safe_int(r.get("FY", ""))
         d = by_fy[fy]
         d["total"] += 1
-        if clean_str(r.get("formal_consult", "")) == "Yes":
+        is_formal = clean_str(r.get("formal_consult", "")) == "Yes"
+        if is_formal:
             d["formal"] += 1
+            e = safe_int(r.get("elapsed", ""))
+            if e > 0:
+                d["elapsed"].append(e)
         else:
             d["informal"] += 1
-        e = safe_int(r.get("elapsed", ""))
-        if e > 0:
-            d["elapsed"].append(e)
-        tc = clean_str(r.get("timely_concl", ""))
-        if tc in ("Yes", "No"):
-            d["timely_total"] += 1
-            if tc == "Yes":
-                d["timely"] += 1
         if safe_int(r.get("n_jeop", "")) > 0:
             d["jeop"] += 1
 
@@ -114,13 +112,12 @@ def main():
             "informal": d["informal"],
             "median_elapsed": round(median(d["elapsed"]), 1) if d["elapsed"] else 0,
             "mean_elapsed": round(mean(d["elapsed"]), 1) if d["elapsed"] else 0,
-            "timely_pct": round(100 * d["timely"] / d["timely_total"], 1) if d["timely_total"] else 0,
             "jeop": d["jeop"],
         })
 
     # --- By Lead Agency (top 20) ---
     agency_counter = Counter()
-    agency_elapsed = defaultdict(list)
+    agency_elapsed = defaultdict(list)  # formal only
     agency_formal = Counter()
     agency_jeop = Counter()
     for r in rows:
@@ -128,11 +125,12 @@ def main():
         if not a:
             a = "Unknown"
         agency_counter[a] += 1
-        e = safe_int(r.get("elapsed", ""))
-        if e > 0:
-            agency_elapsed[a].append(e)
-        if clean_str(r.get("formal_consult", "")) == "Yes":
+        is_formal = clean_str(r.get("formal_consult", "")) == "Yes"
+        if is_formal:
             agency_formal[a] += 1
+            e = safe_int(r.get("elapsed", ""))
+            if e > 0:
+                agency_elapsed[a].append(e)
         if safe_int(r.get("n_jeop", "")) > 0:
             agency_jeop[a] += 1
 
@@ -149,18 +147,19 @@ def main():
 
     # --- By Work Category (top 20) ---
     cat_counter = Counter()
-    cat_elapsed = defaultdict(list)
+    cat_elapsed = defaultdict(list)  # formal only
     cat_formal = Counter()
     for r in rows:
         c = clean_str(r.get("work_category", ""))
         if not c or c in ("Standard", "Informal Consultation", "No", "Yes"):
             c = "other"
         cat_counter[c] += 1
-        e = safe_int(r.get("elapsed", ""))
-        if e > 0:
-            cat_elapsed[c].append(e)
-        if clean_str(r.get("formal_consult", "")) == "Yes":
+        is_formal = clean_str(r.get("formal_consult", "")) == "Yes"
+        if is_formal:
             cat_formal[c] += 1
+            e = safe_int(r.get("elapsed", ""))
+            if e > 0:
+                cat_elapsed[c].append(e)
 
     top_cats = [c for c, _ in cat_counter.most_common(20)]
     category_data = []
@@ -174,18 +173,19 @@ def main():
 
     # --- By State ---
     state_counter = Counter()
-    state_elapsed = defaultdict(list)
+    state_elapsed = defaultdict(list)  # formal only
     state_formal = Counter()
     for r in rows:
         s = clean_str(r.get("state", ""))
         if not s:
             s = "Unknown"
         state_counter[s] += 1
-        e = safe_int(r.get("elapsed", ""))
-        if e > 0:
-            state_elapsed[s].append(e)
-        if clean_str(r.get("formal_consult", "")) == "Yes":
+        is_formal = clean_str(r.get("formal_consult", "")) == "Yes"
+        if is_formal:
             state_formal[s] += 1
+            e = safe_int(r.get("elapsed", ""))
+            if e > 0:
+                state_elapsed[s].append(e)
 
     state_data = []
     for s, cnt in state_counter.most_common(50):
@@ -214,11 +214,12 @@ def main():
         reg = clean_str(r.get("region", ""))
         rname = region_names.get(reg, f"Region {reg}" if reg else "Unknown")
         region_counter[rname] += 1
-        e = safe_int(r.get("elapsed", ""))
-        if e > 0:
-            region_elapsed[rname].append(e)
-        if clean_str(r.get("formal_consult", "")) == "Yes":
+        is_formal = clean_str(r.get("formal_consult", "")) == "Yes"
+        if is_formal:
             region_formal[rname] += 1
+            e = safe_int(r.get("elapsed", ""))
+            if e > 0:
+                region_elapsed[rname].append(e)
 
     region_data = []
     for rname, cnt in region_counter.most_common():
@@ -316,31 +317,13 @@ def main():
 
     elapsed_dist = [{"bucket": k, "count": v} for k, v in elapsed_buckets.items()]
 
-    # --- Formal consultation elapsed distribution ---
-    formal_elapsed = []
+    # --- Informal consultation elapsed distribution (kept as reference) ---
     informal_elapsed = []
     for r in rows:
-        e = safe_int(r.get("elapsed", ""))
-        if e > 0:
-            if clean_str(r.get("formal_consult", "")) == "Yes":
-                formal_elapsed.append(e)
-            else:
+        if clean_str(r.get("formal_consult", "")) != "Yes":
+            e = safe_int(r.get("elapsed", ""))
+            if e > 0:
                 informal_elapsed.append(e)
-
-    formal_elapsed_buckets = {"1-30": 0, "31-60": 0, "61-90": 0, "91-180": 0, "181-365": 0, "366+": 0}
-    for e in formal_elapsed:
-        if e <= 30:
-            formal_elapsed_buckets["1-30"] += 1
-        elif e <= 60:
-            formal_elapsed_buckets["31-60"] += 1
-        elif e <= 90:
-            formal_elapsed_buckets["61-90"] += 1
-        elif e <= 180:
-            formal_elapsed_buckets["91-180"] += 1
-        elif e <= 365:
-            formal_elapsed_buckets["181-365"] += 1
-        else:
-            formal_elapsed_buckets["366+"] += 1
 
     informal_elapsed_buckets = {"1-30": 0, "31-60": 0, "61-90": 0, "91-180": 0, "181-365": 0, "366+": 0}
     for e in informal_elapsed:
@@ -384,7 +367,6 @@ def main():
             "formal_pct": round(100 * formal_count / total, 1) if total else 0,
             "median_elapsed_days": median_elapsed,
             "mean_elapsed_days": mean_elapsed,
-            "timely_pct": timely_pct,
             "jeopardy_consultations": jeop_count,
             "jeopardy_pct": round(100 * jeop_count / total, 2) if total else 0,
         },
@@ -408,19 +390,14 @@ def main():
         "top_species": top_species,
         "jeopardy_species": top_jeop_species,
         "elapsed_distribution": elapsed_dist,
-        "formal_elapsed_dist": [{"bucket": k, "count": v} for k, v in formal_elapsed_buckets.items()],
         "informal_elapsed_dist": [{"bucket": k, "count": v} for k, v in informal_elapsed_buckets.items()],
-        "formal_stats": {
-            "median_elapsed": round(median(formal_elapsed), 1) if formal_elapsed else 0,
-            "mean_elapsed": round(mean(formal_elapsed), 1) if formal_elapsed else 0,
-        },
         "informal_stats": {
             "median_elapsed": round(median(informal_elapsed), 1) if informal_elapsed else 0,
             "mean_elapsed": round(mean(informal_elapsed), 1) if informal_elapsed else 0,
         },
     }
 
-    js_content = f"// ESA Section 7 TAILS Dashboard Data\n// {total} consultations, FY 2008-2018\n// Generated: {output['meta']['generated']}\n\nconst DATA = {json.dumps(output, indent=2)};\n"
+    js_content = f"// ESA Section 7 TAILS Dashboard Data\n// {total} consultations, FY 2008-2016\n// Duration data reflects formal consultations only\n// Generated: {output['meta']['generated']}\n\nconst DATA = {json.dumps(output, indent=2)};\n"
 
     out_path = "data.js"
     with open(out_path, "w") as f:
