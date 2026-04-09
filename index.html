@@ -334,7 +334,7 @@ const kpiGrid = document.getElementById('kpi-grid');
 const kpis = [
     { label: 'Total Consultations', value: num(D.kpis.total), sub: '' },
     { label: 'Formal Consultations', value: num(D.kpis.formal), sub: '' },
-    { label: 'Mean Formal Timeline', value: `${D.kpis.mean_elapsed_days} days`, sub: `Median: ${D.kpis.median_elapsed_days} days` },
+    { label: 'Mean Formal Consultation Timeline', value: `${D.kpis.mean_elapsed_days} days`, sub: '' },
 
     { label: 'Jeopardy Findings', value: D.kpis.jeopardy_consultations, sub: `Out of ${num(D.kpis.formal)} formal consultations` },
 ];
