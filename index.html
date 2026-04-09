@@ -220,7 +220,7 @@ footer a:hover { text-decoration: underline; }
             </svg>
             <div>
                 <div class="site-title">ESA Section 7 Consultation Dashboard</div>
-                <div class="site-subtitle">U.S. Fish & Wildlife Service TAILS Data, FY 2008 &ndash; 2018</div>
+                <div class="site-subtitle">U.S. Fish & Wildlife Service TAILS Data, FY 2008 &ndash; 2016</div>
             </div>
         </div>
     </div>
@@ -243,7 +243,7 @@ footer a:hover { text-decoration: underline; }
     </div>
     <div class="grid-2">
         <div class="chart-card"><h3>Median Elapsed Days by Year</h3><canvas id="chart-annual-duration"></canvas></div>
-        <div class="chart-card"><h3>Timely Conclusion Rate by Year</h3><canvas id="chart-annual-timely"></canvas></div>
+        <div class="chart-card"><h3>Formal Consultations by Year</h3><canvas id="chart-annual-formal"></canvas></div>
     </div>
 </section>
 
@@ -312,7 +312,7 @@ footer a:hover { text-decoration: underline; }
 
 <footer>
 <div class="container">
-    Data from the U.S. Fish & Wildlife Service TAILS database, FY 2008&ndash;2018. Dashboard by the
+    Data from the U.S. Fish & Wildlife Service TAILS database, FY 2008&ndash;2016. Dashboard by the
     <a href="https://americaninnovation.org" target="_blank">Foundation for American Innovation</a>.
 </div>
 </footer>
@@ -339,7 +339,7 @@ const kpis = [
     { label: 'Total Consultations', value: num(D.kpis.total), sub: 'FY 2008 \u2013 2018' },
     { label: 'Formal Consultations', value: num(D.kpis.formal), sub: `${D.kpis.formal_pct}% of total` },
     { label: 'Median Elapsed Days', value: D.kpis.median_elapsed_days, sub: `Mean: ${D.kpis.mean_elapsed_days} days` },
-    { label: 'Timely Conclusion', value: `${D.kpis.timely_pct}%`, sub: 'Met statutory deadline' },
+
     { label: 'Jeopardy Findings', value: D.species_totals.jeopardy_findings, sub: `In ${D.kpis.jeopardy_consultations} consultations` },
 ];
 kpis.forEach(k => {
@@ -408,11 +408,11 @@ makeChart('chart-annual-duration', {
     options: { scales: { y: { beginAtZero: true, title: { display: true, text: 'Days' } } } }
 });
 
-// Annual timely
-makeChart('chart-annual-timely', {
+// Annual formal count
+makeChart('chart-annual-formal', {
     type: 'bar',
-    data: { labels: years, datasets: [{ label: '% Timely', data: D.annual.map(a => a.timely_pct), backgroundColor: GREEN }] },
-    options: { plugins: { legend: { display: false } }, scales: { y: { min: 70, max: 100, title: { display: true, text: '%' } } } }
+    data: { labels: years, datasets: [{ label: 'Formal', data: D.annual.map(a => a.formal), backgroundColor: BLUE }] },
+    options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
 });
 
 // Formal vs Informal doughnut

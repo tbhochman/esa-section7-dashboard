@@ -52,14 +52,14 @@ def main():
 
     print(f"Loaded {len(rows)} rows")
 
-    # --- Filter to valid FY 2008-2018 ---
+    # --- Filter to valid FY 2008-2016 ---
     valid_rows = []
     for r in rows:
         fy = safe_int(r.get("FY", ""))
-        if 2008 <= fy <= 2018:
+        if 2008 <= fy <= 2016:
             valid_rows.append(r)
 
-    print(f"Valid FY 2008-2018: {len(valid_rows)} rows")
+    print(f"Valid FY 2008-2016: {len(valid_rows)} rows")
     rows = valid_rows
 
     # --- KPIs ---
@@ -374,7 +374,7 @@ def main():
     output = {
         "meta": {
             "total_consultations": total,
-            "date_range": "FY 2008-2018",
+            "date_range": "FY 2008-2016",
             "generated": datetime.now().strftime("%Y-%m-%d"),
         },
         "kpis": {
