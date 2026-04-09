@@ -336,7 +336,7 @@ const kpis = [
     { label: 'Formal Consultations', value: num(D.kpis.formal), sub: '' },
     { label: 'Mean Formal Consultation Timeline', value: `${D.kpis.mean_elapsed_days} days`, sub: '' },
 
-    { label: 'Jeopardy Findings', value: D.kpis.jeopardy_consultations, sub: `${(D.kpis.jeopardy_consultations / D.kpis.formal * 100).toFixed(2)}% of formal consultations` },
+    { label: 'Jeopardy Findings', value: D.kpis.jeopardy_consultations, sub: `${(D.kpis.jeopardy_consultations / D.kpis.total * 100).toFixed(4)}% of all consultations` },
 ];
 kpis.forEach(k => {
     const card = document.createElement('div');
