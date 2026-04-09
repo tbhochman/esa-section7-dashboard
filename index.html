@@ -332,8 +332,8 @@ function num(n) { return n.toLocaleString(); }
 // --- KPIs ---
 const kpiGrid = document.getElementById('kpi-grid');
 const kpis = [
-    { label: 'Total Consultations', value: num(D.kpis.total), sub: 'FY 2008 \u2013 2016' },
-    { label: 'Formal Consultations', value: num(D.kpis.formal), sub: `${D.kpis.formal_pct}% of total` },
+    { label: 'Total Consultations', value: num(D.kpis.total), sub: '' },
+    { label: 'Formal Consultations', value: num(D.kpis.formal), sub: '' },
     { label: 'Mean Formal Timeline', value: `${D.kpis.mean_elapsed_days} days`, sub: `Median: ${D.kpis.median_elapsed_days} days` },
 
     { label: 'Jeopardy Findings', value: D.kpis.jeopardy_consultations, sub: `Out of ${num(D.kpis.formal)} formal consultations` },
