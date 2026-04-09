@@ -214,10 +214,6 @@ footer a:hover { text-decoration: underline; }
 <div class="container">
     <div class="header-inner">
         <div class="logo-area">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" height="36" width="36">
-                <rect width="40" height="40" rx="6" fill="#FF4F00"/>
-                <text x="20" y="28" font-family="IBM Plex Serif" font-weight="700" font-size="22" fill="#fff" text-anchor="middle">7</text>
-            </svg>
             <div>
                 <div class="site-title">ESA Section 7 Consultation Dashboard</div>
                 <div class="site-subtitle">U.S. Fish & Wildlife Service TAILS Data, FY 2008 &ndash; 2016</div>
@@ -256,6 +252,7 @@ footer a:hover { text-decoration: underline; }
         <div class="chart-card"><h3>Duration Distribution (Formal)</h3><canvas id="chart-elapsed-dist"></canvas></div>
     </div>
     <div class="grid-2">
+        <div class="chart-card"><h3>Duration: Formal Consultations</h3><canvas id="chart-formal-elapsed"></canvas></div>
         <div class="chart-card"><h3>Duration: Informal Consultations</h3><canvas id="chart-informal-elapsed"></canvas></div>
     </div>
 </section>
@@ -442,6 +439,19 @@ makeChart('chart-elapsed-dist', {
         datasets: [{ label: 'Consultations', data: D.elapsed_distribution.map(d => d.count), backgroundColor: ORANGE }]
     },
     options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { title: { display: true, text: 'Days' } } } }
+});
+
+// Formal elapsed (side-by-side with informal)
+makeChart('chart-formal-elapsed', {
+    type: 'bar',
+    data: {
+        labels: D.elapsed_distribution.map(d => d.bucket),
+        datasets: [{ label: 'Formal', data: D.elapsed_distribution.map(d => d.count), backgroundColor: BLUE }]
+    },
+    options: {
+        plugins: { legend: { display: false }, subtitle: { display: true, text: `Median: ${D.kpis.median_elapsed_days} days | Mean: ${D.kpis.mean_elapsed_days} days`, color: '#999' } },
+        scales: { y: { beginAtZero: true }, x: { title: { display: true, text: 'Days' } } }
+    }
 });
 
 // Informal elapsed
