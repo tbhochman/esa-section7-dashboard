@@ -268,9 +268,10 @@ footer a:hover { text-decoration: underline; }
         <select id="table-state-filter" style="background:var(--card); border:1px solid var(--border); color:var(--text); padding:8px 12px; border-radius:6px; font-family:inherit; font-size:0.85rem;">
             <option value="">All States</option>
         </select>
-        <select id="table-cat-filter" style="background:var(--card); border:1px solid var(--border); color:var(--text); padding:8px 12px; border-radius:6px; font-family:inherit; font-size:0.85rem;">
-            <option value="">All Categories</option>
-        </select>
+        <div id="cat-dropdown" style="position:relative; display:inline-block;">
+            <button id="cat-dropdown-btn" style="background:var(--card); border:1px solid var(--border); color:var(--muted); padding:8px 12px; border-radius:6px; font-family:inherit; font-size:0.85rem; cursor:pointer; min-width:160px; text-align:left;">All Categories &#9662;</button>
+            <div id="cat-dropdown-menu" style="display:none; position:absolute; top:100%; left:0; background:var(--card); border:1px solid var(--border); border-radius:6px; max-height:300px; overflow-y:auto; z-index:100; min-width:280px; padding:8px 0; margin-top:4px;"></div>
+        </div>
         <select id="table-year-from" style="background:var(--card); border:1px solid var(--border); color:var(--text); padding:8px 12px; border-radius:6px; font-family:inherit; font-size:0.85rem;">
             <option value="">From Year</option>
         </select>
@@ -613,10 +614,12 @@ makeChart('chart-determinations', {
     const searchInput = document.getElementById('table-search');
     const agencyFilter = document.getElementById('table-agency-filter');
     const stateFilter = document.getElementById('table-state-filter');
-    const catFilter = document.getElementById('table-cat-filter');
+    const catBtn = document.getElementById('cat-dropdown-btn');
+    const catMenu = document.getElementById('cat-dropdown-menu');
     const yearFrom = document.getElementById('table-year-from');
     const yearTo = document.getElementById('table-year-to');
     const countSpan = document.getElementById('table-count');
+    let selectedCats = new Set();
 
     // Populate filter dropdowns
     const agencies = [...new Set(records.map(r => r.a))].filter(Boolean).sort();
@@ -633,10 +636,30 @@ makeChart('chart-determinations', {
     });
     const cats = [...new Set(records.map(r => r.c))].filter(Boolean).sort();
     cats.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c; opt.textContent = c;
-        catFilter.appendChild(opt);
+        const label = document.createElement('label');
+        label.style.cssText = 'display:block; padding:4px 12px; cursor:pointer; font-size:0.8rem; white-space:nowrap;';
+        label.onmouseenter = () => label.style.background = 'rgba(255,79,0,0.1)';
+        label.onmouseleave = () => label.style.background = 'none';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox'; cb.value = c;
+        cb.style.cssText = 'margin-right:8px; accent-color:var(--orange);';
+        cb.addEventListener('change', () => {
+            if (cb.checked) selectedCats.add(c); else selectedCats.delete(c);
+            catBtn.textContent = selectedCats.size === 0 ? 'All Categories \u25BE' : selectedCats.size + ' categories \u25BE';
+            catBtn.style.color = selectedCats.size > 0 ? 'var(--text)' : 'var(--muted)';
+            renderTable();
+        });
+        label.appendChild(cb);
+        label.appendChild(document.createTextNode(c));
+        catMenu.appendChild(label);
     });
+    catBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        catMenu.style.display = catMenu.style.display === 'none' ? 'block' : 'none';
+    });
+    document.addEventListener('click', () => { catMenu.style.display = 'none'; });
+    catMenu.addEventListener('click', (e) => e.stopPropagation());
+
     for (let y = 2008; y <= 2016; y++) {
         [yearFrom, yearTo].forEach(sel => {
             const opt = document.createElement('option');
@@ -651,14 +674,14 @@ makeChart('chart-determinations', {
         const q = searchInput.value.toLowerCase();
         const ag = agencyFilter.value;
         const st = stateFilter.value;
-        const cat = catFilter.value;
         const yf = yearFrom.value ? parseInt(yearFrom.value) : null;
         const yt = yearTo.value ? parseInt(yearTo.value) : null;
+        const hasCatFilter = selectedCats.size > 0;
         return records.filter(r => {
             if (q && !r.t.toLowerCase().includes(q) && !r.a.toLowerCase().includes(q)) return false;
             if (ag && r.a !== ag) return false;
             if (st && r.s !== st) return false;
-            if (cat && r.c !== cat) return false;
+            if (hasCatFilter && !selectedCats.has(r.c)) return false;
             if (yf || yt) {
                 const yr = r.sd ? parseInt(r.sd.substring(0, 4)) : 0;
                 if (yf && yr < yf) return false;
@@ -721,7 +744,6 @@ makeChart('chart-determinations', {
     searchInput.addEventListener('input', renderTable);
     agencyFilter.addEventListener('change', renderTable);
     stateFilter.addEventListener('change', renderTable);
-    catFilter.addEventListener('change', renderTable);
     yearFrom.addEventListener('change', renderTable);
     yearTo.addEventListener('change', renderTable);
 
