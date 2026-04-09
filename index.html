@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESA Section 7 Consultation Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@400;500;600&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="data.js"></script>
+<style>
+:root {
+    --bg: #121212;
+    --card: #1a1a1a;
+    --border: #2a2a2a;
+    --orange: #FF4F00;
+    --blue: #4997D0;
+    --yellow: #FFA300;
+    --green: #4CAF50;
+    --timber: #D9D9D6;
+    --muted: #999;
+    --text: #e0e0e0;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    line-height: 1.5;
+}
+.container { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+
+/* Header */
+header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+}
+.header-inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.logo-area svg { height: 32px; width: auto; }
+.site-title {
+    font-family: 'IBM Plex Serif', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+}
+.site-subtitle {
+    font-family: 'IBM Plex Sans Condensed', sans-serif;
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Section headers */
+.section-title {
+    font-family: 'IBM Plex Serif', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--orange);
+    display: inline-block;
+}
+
+/* KPI Cards */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+}
+.kpi-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--orange);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+}
+.kpi-label {
+    font-family: 'IBM Plex Sans Condensed', sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+.kpi-value {
+    font-family: 'IBM Plex Serif', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+}
+.kpi-sub {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+/* Chart grids */
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+.grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+.chart-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+}
+.chart-card h3 {
+    font-family: 'IBM Plex Sans Condensed', sans-serif;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 12px;
+}
+.chart-card canvas { width: 100% !important; }
+
+/* Tables */
+.table-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 32px;
+}
+.table-wrap table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+.table-wrap th {
+    font-family: 'IBM Plex Sans Condensed', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.7rem;
+    color: var(--muted);
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--card);
+    cursor: pointer;
+}
+.table-wrap th:hover { color: var(--orange); }
+.table-wrap td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+}
+.table-wrap tr:hover td { background: rgba(255,79,0,0.05); }
+.table-scroll {
+    max-height: 500px;
+    overflow-y: auto;
+}
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.badge-formal { background: rgba(73,151,208,0.2); color: var(--blue); }
+.badge-informal { background: rgba(76,175,80,0.2); color: var(--green); }
+.badge-jeop { background: rgba(255,79,0,0.2); color: var(--orange); }
+
+/* Sections */
+section { padding: 32px 0; }
+section + section { border-top: 1px solid var(--border); }
+
+/* Footer */
+footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+footer a { color: var(--blue); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+/* Responsive */
+@media (max-width: 900px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .kpi-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="container">
+    <div class="header-inner">
+        <div class="logo-area">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" height="36" width="36">
+                <rect width="40" height="40" rx="6" fill="#FF4F00"/>
+                <text x="20" y="28" font-family="IBM Plex Serif" font-weight="700" font-size="22" fill="#fff" text-anchor="middle">7</text>
+            </svg>
+            <div>
+                <div class="site-title">ESA Section 7 Consultation Dashboard</div>
+                <div class="site-subtitle">U.S. Fish & Wildlife Service TAILS Data, FY 2008 &ndash; 2018</div>
+            </div>
+        </div>
+    </div>
+</div>
+</header>
+
+<main class="container">
+
+<!-- KPIs -->
+<section>
+    <div class="kpi-grid" id="kpi-grid"></div>
+</section>
+
+<!-- Annual Trends -->
+<section>
+    <div class="section-title">Annual Trends</div>
+    <div class="grid-2">
+        <div class="chart-card"><h3>Consultations by Fiscal Year</h3><canvas id="chart-annual-total"></canvas></div>
+        <div class="chart-card"><h3>Formal vs. Informal by Year</h3><canvas id="chart-annual-type"></canvas></div>
+    </div>
+    <div class="grid-2">
+        <div class="chart-card"><h3>Median Elapsed Days by Year</h3><canvas id="chart-annual-duration"></canvas></div>
+        <div class="chart-card"><h3>Timely Conclusion Rate by Year</h3><canvas id="chart-annual-timely"></canvas></div>
+    </div>
+</section>
+
+<!-- Consultation Types -->
+<section>
+    <div class="section-title">Consultation Breakdown</div>
+    <div class="grid-3">
+        <div class="chart-card"><h3>Formal vs. Informal</h3><canvas id="chart-formal-informal"></canvas></div>
+        <div class="chart-card"><h3>Consultation Complexity</h3><canvas id="chart-complexity"></canvas></div>
+        <div class="chart-card"><h3>Duration Distribution (All)</h3><canvas id="chart-elapsed-dist"></canvas></div>
+    </div>
+    <div class="grid-2">
+        <div class="chart-card"><h3>Duration: Formal Consultations</h3><canvas id="chart-formal-elapsed"></canvas></div>
+        <div class="chart-card"><h3>Duration: Informal Consultations</h3><canvas id="chart-informal-elapsed"></canvas></div>
+    </div>
+</section>
+
+<!-- By Lead Agency -->
+<section>
+    <div class="section-title">By Lead Agency</div>
+    <div class="grid-2">
+        <div class="chart-card"><h3>Consultation Volume (Top 20)</h3><canvas id="chart-agency-vol"></canvas></div>
+        <div class="chart-card"><h3>Median Duration by Agency (Days)</h3><canvas id="chart-agency-dur"></canvas></div>
+    </div>
+    <div class="table-wrap">
+        <div class="table-scroll">
+            <table id="table-agency">
+                <thead><tr>
+                    <th>Agency</th><th>Consultations</th><th>Formal</th><th>Formal %</th><th>Median Days</th><th>Jeopardy</th>
+                </tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- By Work Category -->
+<section>
+    <div class="section-title">By Project Category</div>
+    <div class="grid-2">
+        <div class="chart-card"><h3>Consultation Volume (Top 20)</h3><canvas id="chart-cat-vol"></canvas></div>
+        <div class="chart-card"><h3>Median Duration by Category (Days)</h3><canvas id="chart-cat-dur"></canvas></div>
+    </div>
+</section>
+
+<!-- By Region & State -->
+<section>
+    <div class="section-title">By FWS Region & State</div>
+    <div class="grid-2">
+        <div class="chart-card"><h3>Consultations by FWS Region</h3><canvas id="chart-region"></canvas></div>
+        <div class="chart-card"><h3>Consultations by State (Top 25)</h3><canvas id="chart-state"></canvas></div>
+    </div>
+</section>
+
+<!-- Species -->
+<section>
+    <div class="section-title">Species Analysis</div>
+    <div class="kpi-grid" id="species-kpis"></div>
+    <div class="grid-2" style="margin-top:24px">
+        <div class="chart-card"><h3>Most Frequently Evaluated Species (Top 20)</h3><canvas id="chart-species"></canvas></div>
+        <div class="chart-card"><h3>Species Determination Outcomes</h3><canvas id="chart-determinations"></canvas></div>
+    </div>
+</section>
+
+</main>
+
+<footer>
+<div class="container">
+    Data from the U.S. Fish & Wildlife Service TAILS database, FY 2008&ndash;2018. Dashboard by the
+    <a href="https://americaninnovation.org" target="_blank">Foundation for American Innovation</a>.
+</div>
+</footer>
+
+<script>
+const D = DATA;
+const ORANGE = '#FF4F00';
+const BLUE = '#4997D0';
+const YELLOW = '#FFA300';
+const GREEN = '#4CAF50';
+const MUTED = '#666';
+const COLORS = ['#FF4F00','#4997D0','#FFA300','#4CAF50','#E91E63','#9C27B0','#00BCD4','#FF9800','#8BC34A','#795548','#607D8B','#3F51B5','#CDDC39','#F44336','#009688','#673AB7','#FFEB3B','#2196F3','#FF5722','#03A9F4'];
+
+Chart.defaults.color = '#999';
+Chart.defaults.borderColor = '#2a2a2a';
+Chart.defaults.font.family = "'IBM Plex Sans', sans-serif";
+Chart.defaults.plugins.legend.labels.boxWidth = 12;
+
+function num(n) { return n.toLocaleString(); }
+
+// --- KPIs ---
+const kpiGrid = document.getElementById('kpi-grid');
+const kpis = [
+    { label: 'Total Consultations', value: num(D.kpis.total), sub: 'FY 2008 \u2013 2018' },
+    { label: 'Formal Consultations', value: num(D.kpis.formal), sub: `${D.kpis.formal_pct}% of total` },
+    { label: 'Median Elapsed Days', value: D.kpis.median_elapsed_days, sub: `Mean: ${D.kpis.mean_elapsed_days} days` },
+    { label: 'Timely Conclusion', value: `${D.kpis.timely_pct}%`, sub: 'Met statutory deadline' },
+    { label: 'Jeopardy Findings', value: D.species_totals.jeopardy_findings, sub: `In ${D.kpis.jeopardy_consultations} consultations` },
+];
+kpis.forEach(k => {
+    const card = document.createElement('div');
+    card.className = 'kpi-card';
+    card.innerHTML = `<div class="kpi-label">${k.label}</div><div class="kpi-value">${k.value}</div><div class="kpi-sub">${k.sub}</div>`;
+    kpiGrid.appendChild(card);
+});
+
+// --- Species KPIs ---
+const spKpis = document.getElementById('species-kpis');
+const st = D.species_totals;
+[
+    { label: 'Species Evaluations', value: num(st.total_evaluated), sub: 'Total across all consultations' },
+    { label: 'No Effect', value: num(st.no_effect), sub: 'Species determinations' },
+    { label: 'NLAA Concurrences', value: num(st.nlaa), sub: 'Not likely to adversely affect' },
+    { label: 'Jeopardy / Adverse Mod.', value: `${st.jeopardy_findings} / ${st.adverse_modification}`, sub: `${st.rpa} RPAs issued` },
+].forEach(k => {
+    const card = document.createElement('div');
+    card.className = 'kpi-card';
+    card.innerHTML = `<div class="kpi-label">${k.label}</div><div class="kpi-value">${k.value}</div><div class="kpi-sub">${k.sub}</div>`;
+    spKpis.appendChild(card);
+});
+
+// --- Charts ---
+const charts = {};
+
+function makeChart(id, config) {
+    const ctx = document.getElementById(id).getContext('2d');
+    if (charts[id]) charts[id].destroy();
+    charts[id] = new Chart(ctx, config);
+}
+
+const years = D.annual.map(a => a.year);
+
+// Annual total
+makeChart('chart-annual-total', {
+    type: 'bar',
+    data: { labels: years, datasets: [{ label: 'Consultations', data: D.annual.map(a => a.total), backgroundColor: ORANGE }] },
+    options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+});
+
+// Annual formal vs informal (stacked)
+makeChart('chart-annual-type', {
+    type: 'bar',
+    data: {
+        labels: years,
+        datasets: [
+            { label: 'Formal', data: D.annual.map(a => a.formal), backgroundColor: BLUE },
+            { label: 'Informal', data: D.annual.map(a => a.informal), backgroundColor: GREEN },
+        ]
+    },
+    options: { plugins: { legend: { position: 'top' } }, scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true } } }
+});
+
+// Annual median duration
+makeChart('chart-annual-duration', {
+    type: 'line',
+    data: {
+        labels: years,
+        datasets: [
+            { label: 'Median', data: D.annual.map(a => a.median_elapsed), borderColor: ORANGE, backgroundColor: 'rgba(255,79,0,0.1)', fill: true, tension: 0.3 },
+            { label: 'Mean', data: D.annual.map(a => a.mean_elapsed), borderColor: BLUE, borderDash: [5,5], tension: 0.3 },
+        ]
+    },
+    options: { scales: { y: { beginAtZero: true, title: { display: true, text: 'Days' } } } }
+});
+
+// Annual timely
+makeChart('chart-annual-timely', {
+    type: 'bar',
+    data: { labels: years, datasets: [{ label: '% Timely', data: D.annual.map(a => a.timely_pct), backgroundColor: GREEN }] },
+    options: { plugins: { legend: { display: false } }, scales: { y: { min: 70, max: 100, title: { display: true, text: '%' } } } }
+});
+
+// Formal vs Informal doughnut
+makeChart('chart-formal-informal', {
+    type: 'doughnut',
+    data: {
+        labels: ['Informal', 'Formal'],
+        datasets: [{ data: [D.kpis.informal, D.kpis.formal], backgroundColor: [GREEN, BLUE] }]
+    },
+    options: { plugins: { legend: { position: 'bottom' } } }
+});
+
+// Complexity
+makeChart('chart-complexity', {
+    type: 'doughnut',
+    data: {
+        labels: D.complexity.map(c => c.name),
+        datasets: [{ data: D.complexity.map(c => c.count), backgroundColor: COLORS.slice(0, D.complexity.length) }]
+    },
+    options: { plugins: { legend: { position: 'bottom' } } }
+});
+
+// Elapsed distribution
+makeChart('chart-elapsed-dist', {
+    type: 'bar',
+    data: {
+        labels: D.elapsed_distribution.map(d => d.bucket),
+        datasets: [{ label: 'Consultations', data: D.elapsed_distribution.map(d => d.count), backgroundColor: ORANGE }]
+    },
+    options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true }, x: { title: { display: true, text: 'Days' } } } }
+});
+
+// Formal elapsed
+makeChart('chart-formal-elapsed', {
+    type: 'bar',
+    data: {
+        labels: D.formal_elapsed_dist.map(d => d.bucket),
+        datasets: [{ label: 'Formal', data: D.formal_elapsed_dist.map(d => d.count), backgroundColor: BLUE }]
+    },
+    options: {
+        plugins: { legend: { display: false }, subtitle: { display: true, text: `Median: ${D.formal_stats.median_elapsed} days | Mean: ${D.formal_stats.mean_elapsed} days`, color: '#999' } },
+        scales: { y: { beginAtZero: true }, x: { title: { display: true, text: 'Days' } } }
+    }
+});
+
+// Informal elapsed
+makeChart('chart-informal-elapsed', {
+    type: 'bar',
+    data: {
+        labels: D.informal_elapsed_dist.map(d => d.bucket),
+        datasets: [{ label: 'Informal', data: D.informal_elapsed_dist.map(d => d.count), backgroundColor: GREEN }]
+    },
+    options: {
+        plugins: { legend: { display: false }, subtitle: { display: true, text: `Median: ${D.informal_stats.median_elapsed} days | Mean: ${D.informal_stats.mean_elapsed} days`, color: '#999' } },
+        scales: { y: { beginAtZero: true }, x: { title: { display: true, text: 'Days' } } }
+    }
+});
+
+// Agency volume (horizontal bar)
+const agTop = D.by_agency.slice(0, 15);
+makeChart('chart-agency-vol', {
+    type: 'bar',
+    data: {
+        labels: agTop.map(a => a.name.length > 35 ? a.name.substring(0,32)+'...' : a.name),
+        datasets: [{ label: 'Consultations', data: agTop.map(a => a.count), backgroundColor: ORANGE }]
+    },
+    options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true } } }
+});
+
+// Agency duration
+const agSorted = [...D.by_agency].sort((a,b) => b.median_elapsed - a.median_elapsed).slice(0,15);
+makeChart('chart-agency-dur', {
+    type: 'bar',
+    data: {
+        labels: agSorted.map(a => a.name.length > 35 ? a.name.substring(0,32)+'...' : a.name),
+        datasets: [{ label: 'Median Days', data: agSorted.map(a => a.median_elapsed), backgroundColor: BLUE }]
+    },
+    options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, title: { display: true, text: 'Days' } } } }
+});
+
+// Agency table
+const agTbody = document.querySelector('#table-agency tbody');
+D.by_agency.forEach(a => {
+    const tr = document.createElement('tr');
+    const fPct = a.count > 0 ? ((a.formal / a.count) * 100).toFixed(1) : '0';
+    tr.innerHTML = `<td>${a.name}</td><td>${num(a.count)}</td><td>${num(a.formal)}</td><td>${fPct}%</td><td>${a.median_elapsed}</td><td>${a.jeop > 0 ? '<span class="badge badge-jeop">'+a.jeop+'</span>' : '0'}</td>`;
+    agTbody.appendChild(tr);
+});
+
+// Category volume
+const catTop = D.by_category.slice(0, 15);
+makeChart('chart-cat-vol', {
+    type: 'bar',
+    data: {
+        labels: catTop.map(c => c.name.length > 30 ? c.name.substring(0,27)+'...' : c.name),
+        datasets: [{ label: 'Consultations', data: catTop.map(c => c.count), backgroundColor: ORANGE }]
+    },
+    options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true } } }
+});
+
+// Category duration
+const catSorted = [...D.by_category].sort((a,b) => b.median_elapsed - a.median_elapsed).slice(0,15);
+makeChart('chart-cat-dur', {
+    type: 'bar',
+    data: {
+        labels: catSorted.map(c => c.name.length > 30 ? c.name.substring(0,27)+'...' : c.name),
+        datasets: [{ label: 'Median Days', data: catSorted.map(c => c.median_elapsed), backgroundColor: BLUE }]
+    },
+    options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, title: { display: true, text: 'Days' } } } }
+});
+
+// Region
+makeChart('chart-region', {
+    type: 'bar',
+    data: {
+        labels: D.by_region.map(r => r.name),
+        datasets: [{ label: 'Consultations', data: D.by_region.map(r => r.count), backgroundColor: COLORS.slice(0, D.by_region.length) }]
+    },
+    options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+});
+
+// State (top 25)
+const stateTop = D.by_state.slice(0, 25);
+makeChart('chart-state', {
+    type: 'bar',
+    data: {
+        labels: stateTop.map(s => s.name),
+        datasets: [{ label: 'Consultations', data: stateTop.map(s => s.count), backgroundColor: ORANGE }]
+    },
+    options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true } } }
+});
+
+// Top species
+const spTop = D.top_species.slice(0, 20);
+makeChart('chart-species', {
+    type: 'bar',
+    data: {
+        labels: spTop.map(s => s.name.length > 35 ? s.name.substring(0,32)+'...' : s.name),
+        datasets: [{ label: 'Evaluations', data: spTop.map(s => s.count), backgroundColor: GREEN }]
+    },
+    options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true } } }
+});
+
+// Determination outcomes
+makeChart('chart-determinations', {
+    type: 'doughnut',
+    data: {
+        labels: ['No Effect', 'NLAA', 'Non-Jeopardy (formal)', 'Jeopardy', 'Adverse Modification'],
+        datasets: [{
+            data: [st.no_effect, st.nlaa, st.total_in_bo - st.no_effect - st.nlaa - st.jeopardy_findings - st.adverse_modification, st.jeopardy_findings, st.adverse_modification],
+            backgroundColor: ['#4CAF50', '#8BC34A', BLUE, ORANGE, '#E91E63']
+        }]
+    },
+    options: { plugins: { legend: { position: 'bottom' } } }
+});
+</script>
+</body>
+</html>
