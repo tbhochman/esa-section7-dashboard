@@ -334,9 +334,9 @@ const kpiGrid = document.getElementById('kpi-grid');
 const kpis = [
     { label: 'Total Consultations', value: num(D.kpis.total), sub: 'FY 2008 \u2013 2016' },
     { label: 'Formal Consultations', value: num(D.kpis.formal), sub: `${D.kpis.formal_pct}% of total` },
-    { label: 'Median Elapsed Days', value: D.kpis.median_elapsed_days, sub: `Mean: ${D.kpis.mean_elapsed_days} days (formal only)` },
+    { label: 'Mean Formal Timeline', value: `${D.kpis.mean_elapsed_days} days`, sub: `Median: ${D.kpis.median_elapsed_days} days` },
 
-    { label: 'Jeopardy Findings', value: D.species_totals.jeopardy_findings, sub: `In ${D.kpis.jeopardy_consultations} consultations` },
+    { label: 'Jeopardy Findings', value: D.kpis.jeopardy_consultations, sub: `Out of ${num(D.kpis.formal)} formal consultations` },
 ];
 kpis.forEach(k => {
     const card = document.createElement('div');
