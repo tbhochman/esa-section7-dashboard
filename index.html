@@ -304,6 +304,48 @@ footer a:hover { text-decoration: underline; }
     </div>
 </section>
 
+<!-- Formal Consultation Records -->
+<section>
+    <div class="section-title">Formal Consultation Records</div>
+    <div style="margin-bottom:12px; display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+        <input type="text" id="table-search" placeholder="Search projects..." style="background:var(--card); border:1px solid var(--border); color:var(--text); padding:8px 12px; border-radius:6px; font-family:inherit; font-size:0.85rem; width:300px;">
+        <select id="table-agency-filter" style="background:var(--card); border:1px solid var(--border); color:var(--text); padding:8px 12px; border-radius:6px; font-family:inherit; font-size:0.85rem;">
+            <option value="">All Agencies</option>
+        </select>
+        <select id="table-state-filter" style="background:var(--card); border:1px solid var(--border); color:var(--text); padding:8px 12px; border-radius:6px; font-family:inherit; font-size:0.85rem;">
+            <option value="">All States</option>
+        </select>
+        <select id="table-cat-filter" style="background:var(--card); border:1px solid var(--border); color:var(--text); padding:8px 12px; border-radius:6px; font-family:inherit; font-size:0.85rem;">
+            <option value="">All Categories</option>
+        </select>
+        <select id="table-year-from" style="background:var(--card); border:1px solid var(--border); color:var(--text); padding:8px 12px; border-radius:6px; font-family:inherit; font-size:0.85rem;">
+            <option value="">From Year</option>
+        </select>
+        <select id="table-year-to" style="background:var(--card); border:1px solid var(--border); color:var(--text); padding:8px 12px; border-radius:6px; font-family:inherit; font-size:0.85rem;">
+            <option value="">To Year</option>
+        </select>
+        <span id="table-count" style="color:var(--muted); font-size:0.8rem;"></span>
+    </div>
+    <div class="table-wrap">
+        <div class="table-scroll" style="max-height:600px;">
+            <table id="table-formal">
+                <thead><tr>
+                    <th data-col="t">Project</th>
+                    <th data-col="a">Agency</th>
+                    <th data-col="c">Category</th>
+                    <th data-col="s">State</th>
+                    <th data-col="sd">Start</th>
+                    <th data-col="cd">Conclusion</th>
+                    <th data-col="e">Days</th>
+                    <th data-col="n">Species</th>
+                    <th data-col="cx">Complexity</th>
+                </tr></thead>
+                <tbody id="formal-tbody"></tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
 </main>
 
 <footer>
@@ -563,6 +605,128 @@ makeChart('chart-determinations', {
     },
     options: { plugins: { legend: { position: 'bottom' } } }
 });
+
+// --- Formal Consultation Records Table ---
+(function() {
+    const records = D.formal_records;
+    const tbody = document.getElementById('formal-tbody');
+    const searchInput = document.getElementById('table-search');
+    const agencyFilter = document.getElementById('table-agency-filter');
+    const stateFilter = document.getElementById('table-state-filter');
+    const catFilter = document.getElementById('table-cat-filter');
+    const yearFrom = document.getElementById('table-year-from');
+    const yearTo = document.getElementById('table-year-to');
+    const countSpan = document.getElementById('table-count');
+
+    // Populate filter dropdowns
+    const agencies = [...new Set(records.map(r => r.a))].filter(Boolean).sort();
+    agencies.forEach(a => {
+        const opt = document.createElement('option');
+        opt.value = a; opt.textContent = a;
+        agencyFilter.appendChild(opt);
+    });
+    const states = [...new Set(records.map(r => r.s))].filter(Boolean).sort();
+    states.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s; opt.textContent = s;
+        stateFilter.appendChild(opt);
+    });
+    const cats = [...new Set(records.map(r => r.c))].filter(Boolean).sort();
+    cats.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c; opt.textContent = c;
+        catFilter.appendChild(opt);
+    });
+    for (let y = 2008; y <= 2016; y++) {
+        [yearFrom, yearTo].forEach(sel => {
+            const opt = document.createElement('option');
+            opt.value = y; opt.textContent = y;
+            sel.appendChild(opt);
+        });
+    }
+
+    let sortCol = 'sd', sortAsc = false;
+
+    function getFiltered() {
+        const q = searchInput.value.toLowerCase();
+        const ag = agencyFilter.value;
+        const st = stateFilter.value;
+        const cat = catFilter.value;
+        const yf = yearFrom.value ? parseInt(yearFrom.value) : null;
+        const yt = yearTo.value ? parseInt(yearTo.value) : null;
+        return records.filter(r => {
+            if (q && !r.t.toLowerCase().includes(q) && !r.a.toLowerCase().includes(q)) return false;
+            if (ag && r.a !== ag) return false;
+            if (st && r.s !== st) return false;
+            if (cat && r.c !== cat) return false;
+            if (yf || yt) {
+                const yr = r.sd ? parseInt(r.sd.substring(0, 4)) : 0;
+                if (yf && yr < yf) return false;
+                if (yt && yr > yt) return false;
+            }
+            return true;
+        });
+    }
+
+    function renderTable() {
+        let filtered = getFiltered();
+        // Sort
+        filtered.sort((a, b) => {
+            let va = a[sortCol], vb = b[sortCol];
+            if (typeof va === 'number') return sortAsc ? va - vb : vb - va;
+            va = (va || '').toLowerCase(); vb = (vb || '').toLowerCase();
+            return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+        });
+
+        countSpan.textContent = `${filtered.length.toLocaleString()} records`;
+        tbody.innerHTML = '';
+        // Render up to 500 at a time for performance
+        const show = filtered.slice(0, 500);
+        const frag = document.createDocumentFragment();
+        show.forEach(r => {
+            const tr = document.createElement('tr');
+            const dBadge = r.e > 365 ? ' <span class="badge badge-jeop">' + r.e + '</span>'
+                         : r.e > 135 ? ' <span class="badge" style="background:rgba(255,163,0,0.2);color:var(--yellow)">' + r.e + '</span>'
+                         : r.e;
+            const jBadge = r.j > 0 ? '<span class="badge badge-jeop">Jeopardy</span>' : '';
+            tr.innerHTML = '<td>' + r.t + (jBadge ? ' ' + jBadge : '') + '</td>'
+                + '<td>' + r.a + '</td>'
+                + '<td>' + r.c + '</td>'
+                + '<td>' + r.s + '</td>'
+                + '<td>' + r.sd + '</td>'
+                + '<td>' + r.cd + '</td>'
+                + '<td>' + dBadge + '</td>'
+                + '<td>' + r.n + '</td>'
+                + '<td>' + r.cx + '</td>';
+            frag.appendChild(tr);
+        });
+        tbody.appendChild(frag);
+        if (filtered.length > 500) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = '<td colspan="9" style="text-align:center;color:var(--muted);font-style:italic">Showing 500 of ' + filtered.length.toLocaleString() + ' records. Use filters to narrow results.</td>';
+            tbody.appendChild(tr);
+        }
+    }
+
+    // Sort on header click
+    document.querySelectorAll('#table-formal th[data-col]').forEach(th => {
+        th.addEventListener('click', () => {
+            const col = th.dataset.col;
+            if (sortCol === col) sortAsc = !sortAsc;
+            else { sortCol = col; sortAsc = true; }
+            renderTable();
+        });
+    });
+
+    searchInput.addEventListener('input', renderTable);
+    agencyFilter.addEventListener('change', renderTable);
+    stateFilter.addEventListener('change', renderTable);
+    catFilter.addEventListener('change', renderTable);
+    yearFrom.addEventListener('change', renderTable);
+    yearTo.addEventListener('change', renderTable);
+
+    renderTable();
+})();
 </script>
 </body>
 </html>

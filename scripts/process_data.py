@@ -353,6 +353,39 @@ def main():
     total_nlaa = sum(safe_int(r.get("n_NLAA", "")) for r in rows)
     total_conc = sum(safe_int(r.get("n_conc", "")) for r in rows)
 
+    # --- Formal consultation records (for table) ---
+    formal_records = []
+    for r in rows:
+        if clean_str(r.get("formal_consult", "")) != "Yes":
+            continue
+        title = clean_str(r.get("title", ""))
+        # Clean up HTML entities
+        title = title.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">")
+        agency = clean_str(r.get("lead_agency", ""))
+        cat = clean_str(r.get("work_category", ""))
+        state = clean_str(r.get("state", ""))
+        start = clean_str(r.get("start_date", ""))
+        concl = clean_str(r.get("FWS_concl_date", ""))
+        elapsed = safe_int(r.get("elapsed", ""))
+        n_spp = safe_int(r.get("n_spp_eval", ""))
+        jeop = safe_int(r.get("n_jeop", ""))
+        complexity = clean_str(r.get("consult_complex", ""))
+        # Use compact keys to save space
+        formal_records.append({
+            "t": title[:120],  # truncate long titles
+            "a": agency,
+            "c": cat,
+            "s": state,
+            "sd": start,
+            "cd": concl,
+            "e": elapsed,
+            "n": n_spp,
+            "j": jeop,
+            "cx": complexity,
+        })
+    # Sort by start date descending
+    formal_records.sort(key=lambda x: x["sd"], reverse=True)
+
     # --- Build output ---
     output = {
         "meta": {
@@ -395,6 +428,7 @@ def main():
             "median_elapsed": round(median(informal_elapsed), 1) if informal_elapsed else 0,
             "mean_elapsed": round(mean(informal_elapsed), 1) if informal_elapsed else 0,
         },
+        "formal_records": formal_records,
     }
 
     js_content = f"// ESA Section 7 TAILS Dashboard Data\n// {total} consultations, FY 2008-2016\n// Duration data reflects formal consultations only\n// Generated: {output['meta']['generated']}\n\nconst DATA = {json.dumps(output, indent=2)};\n"
